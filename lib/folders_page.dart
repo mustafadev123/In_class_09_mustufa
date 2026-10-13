@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'cards_page.dart';
 import 'catalogue_repository.dart';
 import 'database_helper.dart';
 import 'models.dart';
@@ -159,6 +160,20 @@ class _FoldersPageState extends State<FoldersPage> {
     if (mounted) setState(() => _busy = false);
   }
 
+  Future<void> _openFolder(Folder folder) async {
+    if (_busy) return;
+    setState(() => _feedback = null);
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            CardsPage(repository: widget.repository, folder: folder),
+      ),
+    );
+    // Card writes inside the folder may have changed counts.
+    if (mounted) await _loadFolders(showLoading: false);
+  }
+
   void _openRoster() {
     Navigator.push(
       context,
@@ -243,6 +258,7 @@ class _FoldersPageState extends State<FoldersPage> {
           leading: const Icon(Icons.folder),
           title: Text('${folder.id} — ${folder.name}'),
           subtitle: Text('Cards: ${folder.cardCount}'),
+          onTap: _busy ? null : () => _openFolder(folder),
           trailing: IconButton(
             onPressed: _busy ? null : () => _deleteFolder(folder),
             tooltip: 'Delete ${folder.name}',
