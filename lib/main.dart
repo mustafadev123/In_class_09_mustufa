@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'catalogue_repository.dart';
 import 'database_helper.dart';
-import 'roster_page.dart';
+import 'folders_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,11 @@ Future<void> main() async {
   }
   runApp(
     MaterialApp(
-      title: 'Fall Festival Roster',
-      home: RosterPage(helper: helper),
+      title: 'Card Catalogue',
+      home: FoldersPage(
+        helper: helper,
+        repository: CatalogueRepository(helper),
+      ),
     ),
   );
 }
