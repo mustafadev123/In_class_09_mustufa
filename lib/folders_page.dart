@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'cards_page.dart';
 import 'catalogue_repository.dart';
 import 'database_helper.dart';
+import 'diagnostics_page.dart';
 import 'models.dart';
 import 'roster_page.dart';
 
@@ -183,12 +184,26 @@ class _FoldersPageState extends State<FoldersPage> {
     );
   }
 
+  void _openDiagnostics() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => DiagnosticsPage(helper: widget.helper),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Card Catalogue'),
         actions: [
+          IconButton(
+            onPressed: _busy ? null : _openDiagnostics,
+            tooltip: 'Schema diagnostics',
+            icon: const Icon(Icons.storage),
+          ),
           IconButton(
             onPressed: _busy ? null : _openRoster,
             tooltip: 'Part I guest roster',
